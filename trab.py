@@ -50,12 +50,12 @@ def montaEstadosEndMoore(estadosNormal,estadosMultSimbolos,estadosFinais):
  
     return estadosFinaisMoore
 
-def montaTransicoesMoore(estadosMoore,transicoes,estadosMealy):
+def montaTransicoesMoore(estadosMoore,transicoes,estadosMealy,estadoinit):
 
 
     transicoesMoore = []
     lstNos = []
-    no = ["q0", None]
+    no = [estadoinit, None]
     lstNos.append(no)
 
     for i in range(len(estadosMoore)):
@@ -66,8 +66,8 @@ def montaTransicoesMoore(estadosMoore,transicoes,estadosMealy):
 
             if (transicoes[j][2] == no[0]):
 
-                if no[0] == "q0":
-                    no[0] = "q0'"
+                if no[0] == estadoinit:
+                    no[0] = estadoinit
                     no[1] = transicoes[j][3]
                     lstNos.append(no)
                 else:
@@ -85,28 +85,52 @@ def montaTransicoesMoore(estadosMoore,transicoes,estadosMealy):
 
     noMoore = [None, None, None]
     estadoAlternativo = ""
+
+    #Para cada estado de mealy eu faço:
     for i in range(len(estadosMealy)):
+
+        #Verifica se para aquele estado de mealy existe um estado de moore alternativo
+
         estadoAlternativo = estadosMealy[i]+"'"
         if estadoAlternativo in estadosMoore:
+
+            # para cada transição de mealy faz:
             for j in range (len(transicoes)):
+
+                # caso o estado de mealy da transição seja igual ao estado de mealy que tenha um estado alternativo entra condição:
                 if transicoes[j][0] == estadosMealy[i]:
-                    noaux1 =  [transicoes[j][2],transicoes[j][3]]
-                    noaux2 =  [transicoes[j][2]+"'",transicoes[j][3]]
+
+
+                    noaux1 =  [transicoes[j][2],transicoes[j][3]] #ajuda a montar a transição para o estado sem variancia
+                    noaux2 =  [transicoes[j][2]+"'",transicoes[j][3]]#ajuda a montar a transição para o estado com variancia
+
+                    #se o no ta na lista
                     if noaux1 in lstNos:
-                        noMoore = [transicoes[j][0],transicoes[j][1],noaux1[0]]
-                        transicoesMoore.append(noMoore)
+
+                        noMoore = [transicoes[j][0],transicoes[j][1],noaux1[0]]#monto a transição
+                        transicoesMoore.append(noMoore) #adiciono a transição na lista de transições de moore
+
                         noMoore = [transicoes[j][0]+"'",transicoes[j][1],noaux1[0]]
                         transicoesMoore.append(noMoore)
+
+
                     if noaux2 in lstNos:
+
                         noMoore = [transicoes[j][0],transicoes[j][1],noaux2[0]]
                         transicoesMoore.append(noMoore)
+
                         noMoore = [transicoes[j][0]+"'",transicoes[j][1],noaux2[0]]
                         transicoesMoore.append(noMoore)
+
+
         else:
+
             for j in range (len(transicoes)):
+
                 if transicoes[j][0] == estadosMealy[i]:
                     noaux1 =  [transicoes[j][2],transicoes[j][3]]
                     noaux2 =  [transicoes[j][2]+"'",transicoes[j][3]]
+
                     if noaux1 in lstNos:
                         noMoore = [transicoes[j][0],transicoes[j][1],noaux1[0]]
                         transicoesMoore.append(noMoore)
@@ -114,10 +138,6 @@ def montaTransicoesMoore(estadosMoore,transicoes,estadosMealy):
                         noMoore = [transicoes[j][0],transicoes[j][1],noaux2[0]]
                         transicoesMoore.append(noMoore)
 
-
-
-    for transicao in transicoesMoore:
-        print(transicao)
 
     return transicoesMoore
 
@@ -154,7 +174,7 @@ def montaMoore(estadosNormal,estadosMultSimbolos,transicoes,simbolos,estadoInic,
     print("Transições: ",transicoes)
     print("-------------------------------------------------")
     
-    transicoesMoore = montaTransicoesMoore(estadosMoore,transicoes,estadosNormal)
+    transicoesMoore = montaTransicoesMoore(estadosMoore,transicoes,estadosNormal,estadoInic)
 
     #definicaoSaida = montaDefinicaoSaida()
 
@@ -365,12 +385,11 @@ def converteMooreparaMealy(arq,nomearqsai):
 
 
 
-
     print("Nos: ",lstNos)
 
+def montaMealy():
 
-
-
+    return 0
 
 
 def main(argv):
