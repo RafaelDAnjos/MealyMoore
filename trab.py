@@ -381,13 +381,73 @@ def converteMooreparaMealy(arq,nomearqsai):
         lstNos.append(linha)
         linha = arq.readline()
 
+    lstestadosMealy = montaEstadosMealy(lstestadosMoore)
 
+    estadosfinaisMealy = montaEstadosfinaisMealy(estadosFinais)
 
+    transicoesMealy = montaMealy(lstestadosMoore,alfabetoEntrada,alfabetoSaida,estadosFinais,estadoInicial,transicoes,lstNos,lstestadosMealy)
 
+    print("Estados Mealy",lstestadosMealy)
+    print("Final Mealy",estadosfinaisMealy)
+    print("Trans Mealy",transicoesMealy)
 
     print("Nos: ",lstNos)
 
-def montaMealy():
+def montaEstadosMealy(lstestadoMoore):
+    lstestadosmealy = []
+    for i in range(len(lstestadoMoore)):
+        print(len(lstestadoMoore[i]))
+        if len(lstestadoMoore[i]) == 2:
+            lstestadosmealy.append(lstestadoMoore[i])
+
+    return lstestadosmealy
+
+
+def montaEstadosfinaisMealy(estadosFinais):
+    estadosfinaismealy = []
+
+    for i in range(len(estadosFinais)):
+        if len(estadosFinais[i]) <= 2:
+            estadosfinaismealy.append(estadosFinais[i])
+
+    return estadosfinaismealy
+
+
+
+def montaMealy(lstestadosMoore,alfabetoEntrada,alfabetoSaida,estadosFinais,estadoInicial,transicoes,lstNos,lstEstadosmealy):
+
+    transicao = []
+    noMealy = [None,None,None,None]
+    novalstNO = []
+    no = [None,None]
+
+    for i in range(len(lstEstadosmealy)):
+        no = [lstEstadosmealy[i],None]
+        for j in range(len(lstNos)):
+            if no[0] == lstNos[j][0]:
+                if no[0] == estadoInicial:
+                    no = [lstEstadosmealy[i]]
+                    novalstNO.append(no)
+
+                else:
+                    no = [lstEstadosmealy[i],lstNos[j][1]]
+                    novalstNO.append(no)
+            elif no[0]+"'" == lstNos[j][0]:
+                no = [lstEstadosmealy[i], lstNos[j][1]]
+                novalstNO.append(no)
+
+    print(novalstNO)
+    lsttransmealy = []
+    for i in range(len(lstEstadosmealy)):
+        estadoAlternativo = lstEstadosmealy[i]+"'"
+        if  estadoAlternativo in lstestadosMoore:
+            for j in range(transicoes):
+
+                for no in lstNos:
+                     if transicoes[j][0] == no[0]:
+                        noMealy = [lstEstadosmealy[i],transicoes[j][1],]
+
+
 
     return 0
 
